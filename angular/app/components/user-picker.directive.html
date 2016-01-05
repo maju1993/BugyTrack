@@ -1,0 +1,10 @@
+<select class="form-control" ng-model="model">
+    <option
+            ng-repeat="user in users"
+            ng-selected="{{user.id == model.id}}"
+            data-avatar-url="{{user.avatar_url}}"
+            value="{{user}}">
+        {{user.name}}
+    </option>
+    <!--ng-options="option.name for option in userAvailableForAssigment track by option.id"-->
+</select>

@@ -1,0 +1,100 @@
+<div class="modal-header">
+    <h3 class="modal-title">Stwórz błąd</h3>
+</div>
+<div class="modal-body" client-height="70">
+    <form>
+        <div class="form-group">
+            <label for="exampleInputPassword1">Produkt</label>
+            <select class="form-control" id="productSelect" ng-model="bug.product" ng-options="option.name for option in products track by option.id"></select>
+        </div>
+        <div class="form-group">
+            <label for="exampleInputPassword1">Dotyczy wersji</label>
+            <select class="form-control" id="productSelect" ng-model="bug.product" ng-options="option.name for option in products track by option.id"></select>
+        </div>
+        <div class="form-group">
+            <label for="exampleInputPassword1">Komponent</label>
+            <select class="form-control" id="productSelect" ng-model="bug.product" ng-options="option.name for option in products track by option.id"></select>
+        </div>
+        <div class="form-group">
+            <label for="summmaryInput">Podsumowanie</label>
+            <input type="text" class="form-control" id="summmaryInput">
+        </div>
+        <div class="form-group">
+            <label for="groupInput">Grupa</label>
+            <select class="form-control" id="groupInput" ng-model="bug.group" ng-options="option.name for option in groups track by option.id"></select>
+        </div>
+        <div class="form-group">
+            <label for="assignedToInput">Przypisz do</label>
+            <!--<select class="form-control" id="assignedToInput" ng-model="bug.assigedTo" ng-options="option.name for option in userAvailableForAssigment track by option.id"></select>-->
+            <ui-select id="assignedToInput" ng-model="bug.assigedTo">
+                <ui-select-match>
+                    <span ng-bind="$select.selected.name"></span>
+                </ui-select-match>
+                <ui-select-choices repeat="item in (userAvailableForAssigment | filter: $select.search) track by item.id">
+                    <img ng-src="{{item.avatar_url}}" height="50"/>
+                    <span ng-bind="item.name"></span>
+                </ui-select-choices>
+            </ui-select>
+        </div>
+        <div class="form-group">
+            <label for="priorityInput">Priorytet</label>
+            <select class="form-control" id="priorityInput" ng-model="bug.priority" ng-options="option.name for option in priorities track by option.id"></select>
+        </div>
+        <div class="form-group">
+            <label for="severityInput">Krytyczność</label>
+            <select class="form-control" id="severityInput" ng-model="bug.severity" ng-options="option.name for option in severities track by option.id"></select>
+        </div>
+        <div class="form-group">
+            <label for="exampleInputPassword1">Przypisz do</label>
+            <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+        </div>
+        <div class="form-group">
+            <label for="exampleInputPassword1">Status</label>
+            <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+        </div>
+        <div class="form-group">
+            <label for="descriptionTextarea">Opis</label>
+            <textarea class="form-control"
+                      id="descriptionTextarea"
+                      rows="5"
+                      placeholder="Dodaj opis błędu, na przykład kroki jakie należy wykonać aby go odtworzyć"></textarea>
+        </div>
+        <div class="form-group">
+            <label for="exampleInputPassword1">Priorytet</label>
+            <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+        </div>
+        <div class="form-group">
+            <label for="exampleInputPassword1">Załączniki</label>
+            <div flow-init="{query: {'projectId': 'project123', 'bugId': 'bug123'}}"
+                 flow-files-submitted="$flow.upload()"
+                 flow-file-success="attachmentUploaded( $file, $message, $flow )"
+                 >
+
+                <input type="file" flow-btn/>
+                Input OR Other element as upload button
+                <span class="btn" flow-btn>Upload File</span>
+
+                <table>
+                    <tr ng-repeat="file in $flow.files">
+                        <td><img flow-img="$flow.files[$index]" width="100" /></td>
+                        <td>{{$index+1}}</td>
+                        <td>{{file.name}}</td>
+                        <td>{{file.msg}}</td>
+                        <td><button ng-click="removeAttachment(file, $index, $flow)">remove</button> </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="checkbox">
+            <label>
+                <input type="checkbox"> Check me out
+            </label>
+        </div>
+        <button type="submit" class="btn btn-default">Submit</button>
+    </form>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
+    <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+</div>

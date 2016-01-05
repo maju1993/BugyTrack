@@ -1,0 +1,12 @@
+<div>Bugs</div>
+<button ui-sref="bugs.create">Utwórz</button>
+<table>
+    <tr>
+        <th>Id</th>
+        <th>Id</th>
+    </tr>
+    <tr ng-repeat="bug in bugs">
+        <td><a ui-sref="bugDetails({id: bug.id})">test</a> {{bug.id}}</td>
+        <td>{{bug.shortDesc}}</td>
+    </tr>
+</table>
