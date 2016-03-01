@@ -16,6 +16,8 @@
     "require-dir": "*",
     "debug": "*",
     "lodash": "*",
-    "redis": "*"
+    "redis": "*",
+    "express-jwt": "*",
+    "express-unless": "*"
   }
 }
