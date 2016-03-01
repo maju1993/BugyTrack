@@ -5,7 +5,15 @@ angular.module('myApp', [
   'myApp.bug-list',
   'myApp.create-bug',
   'myApp.bug-details',
+  'myApp.projectService',
+  'myApp.bugService',
+  'myApp.socketService',
+  'myApp.accountService',
+  'myApp.authService',
+  'myApp.register',
+  'myApp.login',
   'myApp.version',
+  'LocalStorageModule',
   'ui.bootstrap',
   'ui.select',
   'ngAnimate',
@@ -17,6 +25,16 @@ angular.module('myApp', [
   $urlRouterProvider.otherwise("/bugs");
 
   $stateProvider
+    .state('login', {
+      url: "/login",
+      templateUrl: "account/login.html",
+      controller:"LoginCtrl"
+    })
+    .state('register', {
+      url: "/register",
+      templateUrl: "account/register.html",
+      controller:"RegisterCtrl"
+    })
     .state('bugs', {
       url: "/bugs",
       templateUrl: "bug/bug-list.html",
@@ -28,7 +46,8 @@ angular.module('myApp', [
         var modalInstance = $uibModal.open({
           animation: true,
           templateUrl: 'bug/create-bug.html',
-          controller: 'CreateBugCtrl'
+          controller: 'CreateBugCtrl',
+          backdrop :'static'
           //size: 'lg',
           //resolve: {
           //    $uibModalInstance: function () {

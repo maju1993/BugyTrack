@@ -1,7 +1,18 @@
 'use strict';
 
 angular.module('myApp.create-bug', ['ui.router', 'ui.bootstrap'])
-    .controller('CreateBugCtrl', ['$scope', '$log','$uibModalInstance',function($scope, $log, $uibModalInstance) {
+    .controller('CreateBugCtrl', ['$scope', '$log','$uibModalInstance', 'projectService',function($scope, $log, $uibModalInstance, projectService) {
+        init();
+
+        function init(){
+            projectService.getProjects().then(function(response) {
+                $scope.products = response;
+                $scope.bug.product=$scope.products[0];
+            });
+        };
+
+
+
        $scope.ok = function(){
            $log.info($scope.bug);
            $uibModalInstance.close();
@@ -17,8 +28,6 @@ angular.module('myApp.create-bug', ['ui.router', 'ui.bootstrap'])
             ,{id:2, name:"Użytkownik 2", avatar_url:"http://img1.jurko.net/avatar_4610.jpg"}];
         $scope.bug.assigedTo = $scope.userAvailableForAssigment[0];
 
-        $scope.products =[{id:1, name:"Produkt1"},{id:2, name:"Produkt2"}];
-        $scope.bug.product=$scope.products[0];
 
         $scope.groups =[{id:1, name:"Grupa 1"},{id:2, name:"Grupa 2"}];
         $scope.bug.group=$scope.groups[0];

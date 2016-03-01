@@ -1,12 +1,28 @@
-<div>Bugs</div>
-<button ui-sref="bugs.create">Utwórz</button>
-<table>
-    <tr>
-        <th>Id</th>
-        <th>Id</th>
-    </tr>
-    <tr ng-repeat="bug in bugs">
-        <td><a ui-sref="bugDetails({id: bug.id})">test</a> {{bug.id}}</td>
-        <td>{{bug.shortDesc}}</td>
-    </tr>
-</table>
+<div style="padding: 0px 10px 100px 10px;">
+    <h2>Błędy</h2>
+    <button ui-sref="bugs.create" class="btn btn-primary">Utwórz nowy</button><br/><br/>
+    <div class="table-responsive">
+        <table class="table">
+            <tr>
+                <th>Klucz</th>
+                <th>Podsumowanie</th>
+                <th>Przypisano do</th>
+                <th>Zareportowane przez</th>
+                <th>Priorytet</th>
+                <th>Status</th>
+                <th>Data utworzenia</th>
+                <th>Liczba głosów</th>
+            </tr>
+            <tr ng-repeat="bug in bugs">
+                <td><a ui-sref="bugDetails({id: bug.id})"> {{bug.key}}</a></td>
+                <td>{{bug.summary}}</td>
+                <td>{{bug.assigendTo}}</td>
+                <td>{{bug.reporter}}</td>
+                <td>{{bug.priority}}</td>
+                <td>{{bug.status}}</td>
+                <td>{{bug.shortDesc}}</td>
+                <td>{{bug.shortDesc}}</td>
+            </tr>
+        </table>
+    </div>
+</div>

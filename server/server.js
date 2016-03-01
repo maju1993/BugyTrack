@@ -1,5 +1,4 @@
 var express = require('express');
-var app = express();
 var bodyParser = require('body-parser');
 var morgan = require('morgan');
 var mongoose = require('mongoose');
@@ -9,6 +8,8 @@ var fs = require('fs-extra');
 var _ = require('underscore');
 var mkdirp = require('mkdirp');
 var uuid = require('node-uuid');
+var io = require('socket.io');
+var http = require('http');
 
 var jwt = require('jsonwebtoken');
 var config = require('./config');
@@ -17,7 +18,13 @@ var User=require('./app/models/user');
 
 var port = process.env.PORT || 8080;
 var mediaPath=path.join(__dirname, 'media');
-mongoose.connect(config.database);
+
+
+var app = express()
+    , server = http.createServer(app)
+    , io = io.listen(server);
+
+
 app.set('secret', config.secret);
 
 app.use(bodyParser.urlencoded({ extended:false }));
@@ -55,6 +62,45 @@ app.use(allowCrossDomain);
 
 var apiRoutes = express.Router();
 app.use('/api', apiRoutes);
+
+apiRoutes.post('/authenticate', function(req, res) {
+    User.findOne({
+            email: req.body.email
+        }, function(err, user) {
+        var token = jwt.sign(user, app.get('secret'), {
+            expiresInMinutes: 1440 // expires in 24 hours
+        });
+
+        res.json({
+            success: true,
+            message: 'Enjoy your token!',
+            token: token
+        });
+    });
+    //// find the user
+    //User.findOne({
+    //    email: req.body.name
+    //}, function(err, user) {
+    //    if (err) throw err;
+    //    if (!user) {
+    //        res.json({ success: false, message: 'Authentication failed. User not found.' });
+    //    } else if (user) {
+    //        if(accountManager.manualLogin(user, req.body.password,undefined)) {
+    //            // if user is found and password is right
+    //            // create a token
+    //            var token = jwt.sign(user, app.get('superSecret'), {
+    //                expiresInMinutes: 1440 // expires in 24 hours
+    //            });
+    //
+    //            res.json({
+    //                success: true,
+    //                message: 'Enjoy your token!',
+    //                token: token
+    //            });
+    //        }
+    //    }
+    //});
+});
 
 apiRoutes.get('/',function(req, res){
   res.send('Hello! The API is at http://localhost:' + port + '/api');
@@ -98,13 +144,18 @@ apiRoutes.get('/bugs',function(req, res) {
         }
     ];
     res.json(bugs);
-})
+});
+
+apiRoutes.get('/projects',function(req, res) {
+    var projects = [{id:1, name:"Produkt1"},{id:2, name:"Produkt2"}];
+    res.json(projects);
+});
 
 apiRoutes.post('/account/register', function(req,res){
-res.status(400).send('error')
-  var registerModel=req.body;
-  accountManager.addNewAccount(registerModel);
-  res.send(200);
+    //res.status(400).send('error')
+    var registerModel=req.body;
+    accountManager.addNewAccount(registerModel);
+    res.send(200);
 });
 
 apiRoutes.post('/upload', function (req,res,next) {
@@ -142,6 +193,17 @@ apiRoutes.post('/upload', function (req,res,next) {
         });
     });
 })
+
+app.start = app.listen = function () {
+    return server.listen.apply(server,arguments);
+}
+
+io.sockets.on('connection', function (socket) {
+    socket.emit('news', { hello: 'world' });
+    socket.on('my other event', function (data) {
+        console.log(data);
+    });
+});
 
 app.listen(port);
 console.log('Magic happens at http://localhost:' + port);
