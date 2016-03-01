@@ -29,3 +29,6 @@ node_modules
 # ide files
 .idea/
 .vscode/
+
+# public directory
+.server/public/
