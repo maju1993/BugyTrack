@@ -10,7 +10,7 @@ var debug = require('debug')('app:utils:' + process.pid),
     jsonwebtoken = require("jsonwebtoken"),
     TOKEN_EXPIRATION = 60,
     TOKEN_EXPIRATION_SEC = TOKEN_EXPIRATION * 60,
-    UnauthorizedAccessError = require(path.join(__dirname, 'errors', 'UnauthorizedAccessError.js'));
+    UnauthorizedAccessError = require('../errors/UnauthorizedAccessError.js');
 
 client.on('error', function (err) {
     debug(err);
