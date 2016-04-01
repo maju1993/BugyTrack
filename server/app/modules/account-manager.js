@@ -2,19 +2,7 @@ var crypto 		= require('crypto');
 var User      = require('../models/user');
 var moment 		= require('moment');
 
-
-exports.autoLogin = function(user, pass, callback)
-{
-	User.findOne({user:user}, function(e, o) {
-		if (o){
-			o.pass == pass ? callback(o) : callback(null);
-		}	else{
-			callback(null);
-		}
-	});
-}
-
-exports.manualLogin = function(user, pass, callback)
+exports.login = function(user, pass, callback)
 {
 	User.findOne({user:user}, function(e, o) {
 		if (o == null){

@@ -64,10 +64,22 @@ var apiRoutes = express.Router();
 app.use('/api', apiRoutes);
 
 apiRoutes.post('/authenticate', function(req, res) {
-    User.findOne({
-            email: req.body.email
-        }, function(err, user) {
-        var token = jwt.sign(user, app.get('secret'), {
+    // console.log(req.body);
+    // User.findOne({
+    //         email: req.body.email
+    //     }, function(err, user) {
+    //     var token = jwt.sign(user, app.get('secret'), {
+    //         expiresInMinutes: 1440 // expires in 24 hours
+    //     });
+
+    //     res.json({
+    //         success: true,
+    //         message: 'Enjoy your token!',
+    //         token: token
+    //     });
+    // });
+    var user={};
+    var token = jwt.sign(user, app.get('secret'), {
             expiresInMinutes: 1440 // expires in 24 hours
         });
 
@@ -76,7 +88,7 @@ apiRoutes.post('/authenticate', function(req, res) {
             message: 'Enjoy your token!',
             token: token
         });
-    });
+    
     //// find the user
     //User.findOne({
     //    email: req.body.name

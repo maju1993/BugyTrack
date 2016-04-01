@@ -7,16 +7,19 @@ angular.module('myApp.login', ['ngAnimate'])
         email: "",
         password: ""
     };
-
-    $scope.message = "";
+    $scope.loginFailed = false;
+    $scope.loginFailedMessage = "Niepoprawny login lub hasło";
 
     $scope.login = function () {
 
         authService.login($scope.loginData).then(function (response) {
-                $state.go('bugs');
+                if(response.success){
+                    $state.go('bugs');
+                }
+                $scope.loginFailed=true;
             },
             function (err) {
-                $scope.message = err.error_description;
+                $scope.loginFailed=true;
             });
     };
 }]);

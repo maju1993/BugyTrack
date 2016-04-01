@@ -3,22 +3,12 @@
 var debug = require('debug')('app:utils:' + process.pid),
     path = require('path'),
     util = require('util'),
-    redis = require("redis"),
-    client = redis.createClient(),
     _ = require("lodash"),
     nconf = require("nconf"),
     jsonwebtoken = require("jsonwebtoken"),
     TOKEN_EXPIRATION = 60,
     TOKEN_EXPIRATION_SEC = TOKEN_EXPIRATION * 60,
     UnauthorizedAccessError = require('../errors/UnauthorizedAccessError.js');
-
-client.on('error', function (err) {
-    debug(err);
-});
-
-client.on('connect', function () {
-    debug("Redis successfully connected");
-});
 
 module.exports.fetch = function (headers) {
     if (headers && headers.authorization) {
@@ -61,31 +51,7 @@ module.exports.create = function (user, req, res, next) {
 
     debug("Token generated for user: %s, token: %s", data.username, data.token);
 
-    client.set(data.token, JSON.stringify(data), function (err, reply) {
-        if (err) {
-            return next(new Error(err));
-        }
-
-        if (reply) {
-            client.expire(data.token, TOKEN_EXPIRATION_SEC, function (err, reply) {
-                if (err) {
-                    return next(new Error("Can not set the expire value for the token key"));
-                }
-                if (reply) {
-                    req.user = data;
-                    next(); // we have succeeded
-                } else {
-                    return next(new Error('Expiration not set on redis'));
-                }
-            });
-        }
-        else {
-            return next(new Error('Token not set in redis'));
-        }
-    });
-
     return data;
-
 };
 
 module.exports.retrieve = function (id, done) {

@@ -18,6 +18,14 @@
     "lodash": "*",
     "redis": "*",
     "express-jwt": "*",
-    "express-unless": "*"
+    "express-unless": "*",
+    "path":"*",
+    "connect-busboy":"*",
+    "fs-extra":"*",
+    "underscore":"*",
+    "mkdirp":"*",
+    "node-uuid":"*",
+    "socket.io":"*",
+    "http":"*"
   }
 }

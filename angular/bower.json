@@ -19,6 +19,11 @@
     "install": "~1.0.4",
     "ui-select": "angular-ui-select#~0.13.2",
     "ng-flow": "~2",
-    "angular-local-storage": "~0.2.3"
+    "angular-local-storage": "~0.2.3",
+    "angular-translate": "*",
+    "angular-sanitize": "*"
+  },
+  "resolutions": {
+    "angular": ">1.2.0"
   }
 }

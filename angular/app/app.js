@@ -10,6 +10,8 @@ angular.module('myApp', [
   'myApp.socketService',
   'myApp.accountService',
   'myApp.authService',
+  'myApp.authInterceptorService',
+  'myApp.languageService',
   'myApp.register',
   'myApp.login',
   'myApp.version',
@@ -18,27 +20,32 @@ angular.module('myApp', [
   'ui.select',
   'ngAnimate',
   'ui.router',
-  'flow'
+  'flow',
+  'pascalprecht.translate',
+  'ngSanitize'
 ])
 
 .config(function($stateProvider, $urlRouterProvider) {
-  $urlRouterProvider.otherwise("/bugs");
+  $urlRouterProvider.otherwise("/login");
 
   $stateProvider
     .state('login', {
       url: "/login",
       templateUrl: "account/login.html",
-      controller:"LoginCtrl"
+      controller:"LoginCtrl",
+      authenticate: false
     })
     .state('register', {
       url: "/register",
       templateUrl: "account/register.html",
-      controller:"RegisterCtrl"
+      controller:"RegisterCtrl",
+      authenticate: false
     })
     .state('bugs', {
       url: "/bugs",
       templateUrl: "bug/bug-list.html",
-      controller:"BugListCtrl"
+      controller:"BugListCtrl",
+      authenticate: true
     })
     .state("bugs.create",{
       url: "/create",
@@ -81,6 +88,37 @@ angular.module('myApp', [
     //permanentErrors:[404, 500, 501]
   };
 }])
+
+.run(function($rootScope, $state, authService){
+    $rootScope.$on("$stateChangeStart", function(event, toState, toParams, fromState, fromParams){
+        if (toState.authenticate && !authService.authentication.isAuth){
+            // User isn’t authenticated
+            $state.transitionTo("login");
+            event.preventDefault(); 
+        }
+    });  
+})
+
+.config(function ($httpProvider) {
+    $httpProvider.interceptors.push('authInterceptorService');
+})
+
+.config(function ($translateProvider) {
+  $translateProvider.translations('pl', {
+    Login: 'Zaloguj',
+    Register: 'Rejestracja'
+  });
+  $translateProvider.translations('en', {
+    Login: 'Login',
+    Register: 'Register'
+  });
+  $translateProvider.useSanitizeValueStrategy('sanitize');
+})
+
+.run(function($translate, languageService){
+    $translate.use(languageService.lang);
+  //$translate.preferredLanguage(languageService.lang);
+})
 
 .directive('clientHeight', function(){
   return {

@@ -1,6 +1,6 @@
 "use strict";
 
-var debug = require('debug')('app:routes:default' + process.pid),
+var debug = require('debug')('app:routes:' + process.pid),
     _ = require("lodash"),
     util = require('util'),
     path = require('path'),
@@ -9,7 +9,8 @@ var debug = require('debug')('app:routes:default' + process.pid),
     UnauthorizedAccessError = require(path.join(__dirname, "..", "errors", "UnauthorizedAccessError.js")),
     User = require(path.join(__dirname, "..", "models", "user.js")),
     jwt = require("express-jwt"),
-    accountManager = require('../modules/account-manager');
+    accountManager = require('../modules/account-manager'),
+    logger = require('winston');
 
 var authenticate = function (req, res, next) {
 
@@ -35,17 +36,15 @@ var authenticate = function (req, res, next) {
                     message: 'Invalid username or password'
                 }));
             }
-
-            user.comparePassword(password, function (err, isMatch) {
-                if (isMatch && !err) {
-                    debug("User authenticated, generating token");
-                    utils.create(user, req, res, next);
-                } else {
+            accountManager.login(username, password, function (error) {
+                if(error){
                     return next(new UnauthorizedAccessError("401", {
                         message: 'Invalid username or password'
                     }));
                 }
-            });
+                debug("User authenticated, generating token");
+                utils.create(user, req, res, next);
+            })
         });
 
     });
@@ -53,10 +52,7 @@ var authenticate = function (req, res, next) {
 
 };
 
-module.exports = function () {
-
-    var router = new Router();
-
+module.exports = function (router) {
     router.route("/verify").get(function (req, res, next) {
         return res.status(200).json(undefined);
     });
