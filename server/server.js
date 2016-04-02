@@ -10,11 +10,13 @@ var mkdirp = require('mkdirp');
 var uuid = require('node-uuid');
 var io = require('socket.io');
 var http = require('http');
+var cors = require('cors');
 
 var jwt = require('jsonwebtoken');
 var config = require('./config');
 var accountManager=require('./app/modules/account-manager');
 var User=require('./app/models/user');
+var dataGenerator = require('./app/modules/data-generator.js');
 
 var port = process.env.PORT || 8080;
 var mediaPath=path.join(__dirname, 'media');
@@ -32,25 +34,6 @@ app.use(bodyParser.json());
 app.use(busboy());
 app.use('/media', express.static(mediaPath));
 
-function allowCrossDomain(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    next();
-    //
-    //res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-    //
-    //var origin = req.headers.origin;
-    //if (_.contains(app.get('allowed_origins'), origin)) {
-    //    res.setHeader('Access-Control-Allow-Origin', origin);
-    //}
-    //
-    //if (req.method === 'OPTIONS') {
-    //    res.send(200);
-    //} else {
-    //    next();
-    //}
-}
-
 app.use(morgan('dev'));
 
 app.use(function(err, req, res, next) {
@@ -58,7 +41,7 @@ app.use(function(err, req, res, next) {
   res.status(500).send('Something broke! Please try again later or contact system administrator');
 });
 
-app.use(allowCrossDomain);
+app.use(cors());
 
 var apiRoutes = express.Router();
 app.use('/api', apiRoutes);
@@ -125,36 +108,37 @@ apiRoutes.get('/users',function(req, res){
 });
 
 apiRoutes.get('/bugs',function(req, res) {
-    var bugs = [
-        {
-            id: '72ada242-bb84-466c-8d78-517e84182be3',
-            groupId: '081e105e-a66f-4e71-be06-c8acc7bd7601',
-            assignedToId: '6bfcd9f5-137e-400d-85ce-11080766b7b6',
-            severity: '1',
-            status: 'new',
-            creationTimestamp: new Date(),
-            DeltaTimestamp: new Date(),
-            ShortDesc: 'short desc',
-            operationSystemId: 'osfcd9f5-137e-400d-85ce-11080766b7b6',
-            priority: '1',
-            productId: '1',
-            repPlatformId: '1'
-        },
-        {
-            id: '72ada242-bb84-466c-8d78-517e84182be3',
-            groupId: '081e105e-a66f-4e71-be06-c8acc7bd7601',
-            assignedToId: '6bfcd9f5-137e-400d-85ce-11080766b7b6',
-            severity: '1',
-            status: 'new',
-            creationTimestamp: new Date(),
-            DeltaTimestamp: new Date(),
-            ShortDesc: 'short desc 2',
-            operationSystemId: 'osfcd9f5-137e-400d-85ce-11080766b7b6',
-            priority: '1',
-            productId: '1',
-            repPlatformId: '1'
-        }
-    ];
+    // var bugs = [
+    //     {
+    //         id: '72ada242-bb84-466c-8d78-517e84182be3',
+    //         groupId: '081e105e-a66f-4e71-be06-c8acc7bd7601',
+    //         assignedToId: '6bfcd9f5-137e-400d-85ce-11080766b7b6',
+    //         severity: '1',
+    //         status: 'new',
+    //         creationTimestamp: new Date(),
+    //         DeltaTimestamp: new Date(),
+    //         ShortDesc: 'short desc',
+    //         operationSystemId: 'osfcd9f5-137e-400d-85ce-11080766b7b6',
+    //         priority: '1',
+    //         productId: '1',
+    //         repPlatformId: '1'
+    //     },
+    //     {
+    //         id: '72ada242-bb84-466c-8d78-517e84182be3',
+    //         groupId: '081e105e-a66f-4e71-be06-c8acc7bd7601',
+    //         assignedToId: '6bfcd9f5-137e-400d-85ce-11080766b7b6',
+    //         severity: '1',
+    //         status: 'new',
+    //         creationTimestamp: new Date(),
+    //         DeltaTimestamp: new Date(),
+    //         ShortDesc: 'short desc 2',
+    //         operationSystemId: 'osfcd9f5-137e-400d-85ce-11080766b7b6',
+    //         priority: '1',
+    //         productId: '1',
+    //         repPlatformId: '1'
+    //     }
+    // ];
+    var bugs = dataGenerator.bugs(10);
     res.json(bugs);
 });
 

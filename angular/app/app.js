@@ -14,6 +14,7 @@ angular.module('myApp', [
   'myApp.languageService',
   'myApp.register',
   'myApp.login',
+  'myApp.layoutCtrl',
   'myApp.version',
   'LocalStorageModule',
   'ui.bootstrap',
@@ -22,33 +23,44 @@ angular.module('myApp', [
   'ui.router',
   'flow',
   'pascalprecht.translate',
-  'ngSanitize'
+  'ngSanitize',
+  'infinite-scroll'
 ])
 
 .config(function($stateProvider, $urlRouterProvider) {
   $urlRouterProvider.otherwise("/login");
 
   $stateProvider
-    .state('login', {
+    .state('master',{
+      abstract:true,
+      views:{
+          '@':{
+              templateUrl: 'layout/layout.html',
+              controller: 'layoutCtrl'
+          }
+      }  
+    })
+    .state('master.login', {
       url: "/login",
       templateUrl: "account/login.html",
       controller:"LoginCtrl",
       authenticate: false
     })
-    .state('register', {
+    .state('master.register', {
       url: "/register",
       templateUrl: "account/register.html",
       controller:"RegisterCtrl",
       authenticate: false
     })
-    .state('bugs', {
+    .state('master.bugs', {
       url: "/bugs",
       templateUrl: "bug/bug-list.html",
       controller:"BugListCtrl",
       authenticate: true
     })
-    .state("bugs.create",{
+    .state("master.bugs.create",{
       url: "/create",
+      authenticate: true,
       onEnter: ['$stateParams', '$state', '$uibModal', '$log', function($stateParams, $state, $uibModal, $log) {
         var modalInstance = $uibModal.open({
           animation: true,
@@ -72,10 +84,11 @@ angular.module('myApp', [
         });
       }]
     })
-    .state("bugDetails",{
+    .state("master.bugDetails",{
       url: "/bugs/:id",
       templateUrl: "bug/bug-details.html",
-      controller:"BugDetailsCtrl"
+      controller:"BugDetailsCtrl",
+      authenticate: true
     });
 })
 
@@ -89,11 +102,19 @@ angular.module('myApp', [
   };
 }])
 
+.run(['authService', function (authService) {
+    authService.fillAuthData();
+}])
+
 .run(function($rootScope, $state, authService){
     $rootScope.$on("$stateChangeStart", function(event, toState, toParams, fromState, fromParams){
         if (toState.authenticate && !authService.authentication.isAuth){
             // User isn’t authenticated
-            $state.transitionTo("login");
+            $state.transitionTo("master.login");
+            event.preventDefault(); 
+        }
+        else if(authService.authentication.isAuth && (toState.name==="master.login" || toState.name==="master.register")){
+            $state.transitionTo("master.bugs");
             event.preventDefault(); 
         }
     });  
