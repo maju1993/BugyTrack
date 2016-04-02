@@ -1,0 +1,64 @@
+<form ng-submit="create()">
+  <div class="form-group">
+    <label for="nameInput">{{'Name'|translate}}</label>
+    <input type="text" class="form-control" id="nameInput" ng-model="project.name" placeholder="{{'Name'|translate}}">
+  </div>
+  <div class="form-group">
+    <label for="decriptionInput">{{'Description'|translate}}</label>
+    <textarea class="form-control" id="decriptionInput" ng-model="project.description"  placeholder="{{'Description'|translate}}"></textarea>
+  </div>
+  <div class="form-group">
+    <label for="urlInput">{{'Url'|translate}}</label>
+    <input type="text" class="form-control" id="urlInput" ng-model="project.url"  placeholder="{{'MyGreatUrl'|translate}}">
+  </div>
+  <div class="form-group">
+    <label for="maxVoteSuperBugInput">{{'MaxVoteSuperBug'|translate}}</label>
+    <input type="text" class="form-control" id="maxVoteSuperBugInput" ng-model="project.maxVoteSuperBug"  placeholder="{{'MaxVoteSuperBug'|translate}}">
+  </div>
+  <div class="form-group">
+    <label for="defaultMileStoneInput">{{'DefaultMileStone'|translate}}</label>
+    <!--<input type="text" class="form-control" id="defaultMileStoneInput" ng-model="project.defaultMileStone"  placeholder="{{'DefaultMileStone'|translate}}">-->
+    <ui-select ng-model="project.defaultMileStone">
+        <ui-select-match placeholder="{{'SelectDefaultMileStone'|translate}}" class="ui-select-match">
+            <span ng-bind="$select.selected"></span>
+       </ui-select-match>
+        <ui-select-choices repeat="milestone in getMilestones($select.search) | filter: $select.search" class="ui-select-choices">
+            <div ng-bind="milestone"></div>
+        </ui-select-choices>
+    </ui-select>
+    
+     <!--<ui-select id="assignedToInput" ng-model="bug.assigedTo">
+                <ui-select-match>
+                    <span ng-bind="$select.selected.name"></span>
+                </ui-select-match>
+                <ui-select-choices repeat="item in (userAvailableForAssigment | filter: $select.search) track by item.id">
+                    <img ng-src="{{item.avatar_url}}" height="50"/>
+                    <span ng-bind="item.name"></span>
+                </ui-select-choices>
+            </ui-select>-->
+  </div>
+  <div class="form-group">
+    <label for="versionInput">{{'Version'|translate}}</label>
+    <input type="text" class="form-control" id="versionInput" ng-model="project.version"  placeholder="{{'Version'|translate}}">
+  </div>
+  <div class="form-group">
+    <label for="imageInputFile">{{'Image'|translate}}</label>
+    <input type="file" id="imageInputFile" ng-model="project.image" >
+    <!--<p class="help-block">Example block-level help text here.</p>-->
+  </div>
+  <button type="submit" class="btn btn-default">{{'Create'|translate}}</button>
+</form>
+<!--
+<form>
+    <input type="text" />
+</form>
+asdad
+
+Id
+Name
+Description
+Url
+MAxVoteSuperBug
+VotesConfirm
+DefaultMileStone
+VersionId-->

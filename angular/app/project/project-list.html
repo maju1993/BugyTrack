@@ -1,0 +1,22 @@
+<button ui-sref="master.createProject" class="btn btn-primary">Utwórz nowy</button><br/><br/>
+<div class="row">
+<div ng-repeat="project in projects">
+    <div class="col-sm-4">
+        <div class="imageHolder">
+            <a href="#/projects/{{project.id}}" ui-sref="master.projectDetails({id: project.id})">
+            <img src="{{project.imgUrl}}" class="align-center img-responsive" alt="" />
+            <span class="caption" class="">
+                <p class="text-center">{{project.name}}</p>
+            </div>
+            </a>
+        </div>
+    </div>
+    <!--<div class="col-sm-4">
+        <div style="height:400px;width:400px; background-color:grey">
+            <p style="position:absolute;bottom:180px;left:180px;">
+                <i class="fa fa-plus"></i> Test
+            </p>
+        </div>
+    </div>-->
+</div>
+</div>

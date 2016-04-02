@@ -6,7 +6,7 @@ angular.module('myApp.create-bug', ['ui.router', 'ui.bootstrap'])
 
         function init(){
             projectService.getProjects().then(function(response) {
-                $scope.products = response;
+                $scope.products = response.data;
                 $scope.bug.product=$scope.products[0];
             });
         };
@@ -24,8 +24,8 @@ angular.module('myApp.create-bug', ['ui.router', 'ui.bootstrap'])
 
         $scope.bug={};
 
-        $scope.userAvailableForAssigment = [{id:1, name:"Użytkownik 1", avatar_url:"http://img1.jurko.net/avatar_2045.jpg"}
-            ,{id:2, name:"Użytkownik 2", avatar_url:"http://img1.jurko.net/avatar_4610.jpg"}];
+        $scope.userAvailableForAssigment = [{id:1, name:"Użytkownik 1", avatar_url:"https://s3.amazonaws.com/uifaces/faces/twitter/sauro/128.jpg"}
+            ,{id:2, name:"Użytkownik 2", avatar_url:"https://s3.amazonaws.com/uifaces/faces/twitter/jina/128.jpg"}];
         $scope.bug.assigedTo = $scope.userAvailableForAssigment[0];
 
 

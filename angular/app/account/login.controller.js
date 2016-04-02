@@ -14,7 +14,7 @@ angular.module('myApp.login', ['ngAnimate'])
 
         authService.login($scope.loginData).then(function (response) {
                 if(response.success){
-                    $state.go('bugs');
+                    $state.go('master.bugs');
                 }
                 $scope.loginFailed=true;
             },

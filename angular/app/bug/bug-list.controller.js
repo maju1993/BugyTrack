@@ -1,13 +1,48 @@
 'use strict';
 
 angular.module('myApp.bug-list', ['ngAnimate', 'ui.bootstrap', 'ui.router'])
-    .controller('BugListCtrl', ['$scope', 'bugService', function($scope, bugService) {
+    .controller('BugListCtrl', ['$scope', '$translate', 'bugService', function($scope, $translate, bugService) {
+        $scope.nextPage=_nextPage;
+        $scope.statuses=[];
+        $scope.filters={};
+        $scope.priorities=[1,2,3,4,5];
+        
         init();
         
         function init(){
            bugService.getBugs().then(function(response) {
                $scope.bugs = response.data;
            });
+           _initStatuses();
+        }
+        
+        function _nextPage() {
+            if($scope.busy)
+                return;
+            $scope.busy=true;
+            
+            bugService.getBugs().then(function(response){
+                for(var i=0;i<response.data.length;i++){
+                    $scope.bugs.push(response.data[i]);
+                    console.log(response.data[i]);
+                }
+                $scope.busy=false;
+            });
+        }
+        
+        function _initStatuses(){
+            $translate('Statuses.New').then(function (display) {
+                 $scope.statuses.push({display:display, value:'new'})
+            });
+             $translate('Statuses.Done').then(function (display) {
+                 $scope.statuses.push({display:display, value:'done'})
+            });
+             $translate('Statuses.InTesting').then(function (display) {
+                 $scope.statuses.push({display:display, value:'inTesting'})
+            });
+             $translate('Statuses.InProgress').then(function (display) {
+                 $scope.statuses.push({display:display, value:'inProgress'})
+            });
         }
         
         // $scope.bugs = [

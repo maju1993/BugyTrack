@@ -138,12 +138,16 @@ apiRoutes.get('/bugs',function(req, res) {
     //         repPlatformId: '1'
     //     }
     // ];
-    var bugs = dataGenerator.bugs(10);
-    res.json(bugs);
+    setTimeout(function () {
+        dataGenerator.bugs(10).then(function(bugs){
+            res.json(bugs);
+        });
+    }, 1000);
 });
 
 apiRoutes.get('/projects',function(req, res) {
-    var projects = [{id:1, name:"Produkt1"},{id:2, name:"Produkt2"}];
+    //var projects = [{id:1, name:"Produkt1"},{id:2, name:"Produkt2"}];
+    var projects = dataGenerator.projects(5);
     res.json(projects);
 });
 

@@ -21,9 +21,10 @@
     "ng-flow": "~2",
     "angular-local-storage": "~0.2.3",
     "angular-translate": "*",
-    "angular-sanitize": "*"
+    "angular-sanitize": "*",
+    "ngInfiniteScroll": "*"
   },
   "resolutions": {
-    "angular": ">1.2.0"
+    "angular": "1.5.3"
   }
 }

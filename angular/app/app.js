@@ -6,6 +6,9 @@ angular.module('myApp', [
   'myApp.create-bug',
   'myApp.bug-details',
   'myApp.projectService',
+  'myApp.project-list',
+  'myApp.project-details',
+  'myApp.create-project',
   'myApp.bugService',
   'myApp.socketService',
   'myApp.accountService',
@@ -14,6 +17,7 @@ angular.module('myApp', [
   'myApp.languageService',
   'myApp.register',
   'myApp.login',
+  'myApp.logout',
   'myApp.layoutCtrl',
   'myApp.version',
   'LocalStorageModule',
@@ -89,6 +93,29 @@ angular.module('myApp', [
       templateUrl: "bug/bug-details.html",
       controller:"BugDetailsCtrl",
       authenticate: true
+    })
+    .state('master.projects',{
+        url: "/projects",
+        templateUrl: "project/project-list.html",
+        controller:"ProjectListCtrl",
+        authenticate: true
+    })
+    .state('master.projectDetails',{
+        url: "/projects/:id",
+        templateUrl: "project/project-details.html",
+        controller:"ProjectDetailsCtrl",
+        authenticate: true
+    })
+    .state('master.createProject',{
+        url: "/project/create",
+        templateUrl: "project/create-project.html",
+        controller:"CreateProjectCtrl",
+        authenticate: true
+    })
+    .state('master.logout',{
+        url: "/logout",
+        controller:"LogoutCtrl",
+        authenticate: true
     });
 })
 
@@ -127,7 +154,15 @@ angular.module('myApp', [
 .config(function ($translateProvider) {
   $translateProvider.translations('pl', {
     Login: 'Zaloguj',
-    Register: 'Rejestracja'
+    Register: 'Rejestracja',
+    Name: 'Nazwa',
+    MyGreatUrl: 'np. https://nasz.super.projekt.pl',
+    Statuses :{
+        New: 'Nowy',
+        Done: 'Naprawiony',
+        InProgress: 'W trakcie prac',
+        InTesting: 'W trakcie testowania' 
+    }
   });
   $translateProvider.translations('en', {
     Login: 'Login',

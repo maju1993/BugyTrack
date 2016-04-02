@@ -27,10 +27,10 @@
             <label for="assignedToInput">Przypisz do</label>
             <!--<select class="form-control" id="assignedToInput" ng-model="bug.assigedTo" ng-options="option.name for option in userAvailableForAssigment track by option.id"></select>-->
             <ui-select id="assignedToInput" ng-model="bug.assigedTo">
-                <ui-select-match>
+                <ui-select-match class="ui-select-match">
                     <span ng-bind="$select.selected.name"></span>
                 </ui-select-match>
-                <ui-select-choices repeat="item in (userAvailableForAssigment | filter: $select.search) track by item.id">
+                <ui-select-choices repeat="item in (userAvailableForAssigment | filter: $select.search) track by item.id" class="ui-select-choices">
                     <img ng-src="{{item.avatar_url}}" height="50"/>
                     <span ng-bind="item.name"></span>
                 </ui-select-choices>

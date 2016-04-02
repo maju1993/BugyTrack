@@ -1,7 +1,31 @@
-<div style="padding: 0px 10px 100px 10px;">
+<div>
     <h2>Błędy</h2>
     <button ui-sref="master.bugs.create" class="btn btn-primary">Utwórz nowy</button><br/><br/>
-    <div class="table-responsive">
+    <div class="row">
+        <div class="col-md-4">
+            <ui-select id="statusFilter" ng-model="filters.status">
+                <ui-select-match class="ui-select-match">
+                    <span ng-bind="$select.selected.display"></span>
+                </ui-select-match>
+                <ui-select-choices repeat="item in (statuses | filter: $select.search) track by item.value" class="ui-select-choices">
+                    <span ng-bind="item.display"></span>
+                </ui-select-choices>
+            </ui-select>
+        </div>
+        <div class="col-md-4">
+            <ui-select id="priorityFilter" ng-model="filters.priority">
+                <ui-select-match class="ui-select-match">
+                    <span ng-bind="$select.selected"></span>
+                </ui-select-match>
+                <ui-select-choices repeat="item in priorities" class="ui-select-choices">
+                    <span ng-bind="item"></span>
+                </ui-select-choices>
+            </ui-select>
+        </div>
+        <div class="col-md-4"><button class="btn btn-default">{{'Filter'|translate}}</button></div>
+    </div>
+    <br>
+    <div class="table-responsive"  infinite-scroll='nextPage()' infinite-scroll-disabled='busy' infinite-scroll-distance='1'>
         <table class="table">
             <tr>
                 <th>Klucz</th>
@@ -11,18 +35,22 @@
                 <th>Priorytet</th>
                 <th>Status</th>
                 <th>Data utworzenia</th>
+                <th>Data edycji</th>
                 <th>Liczba głosów</th>
             </tr>
             <tr ng-repeat="bug in bugs">
-                <td><a ui-sref="bugDetails({id: bug.id})"> {{bug.key}}</a></td>
+                <td><a ui-sref="master.bugDetails({id: bug.id})" href="#/bugs/{{bug.id}}"> {{bug.key}}</a></td>
                 <td>{{bug.summary}}</td>
                 <td>{{bug.assigendTo}}</td>
                 <td>{{bug.reporter}}</td>
                 <td>{{bug.priority}}</td>
                 <td>{{bug.status}}</td>
-                <td>{{bug.shortDesc}}</td>
-                <td>{{bug.shortDesc}}</td>
+                <td>{{bug.creationTimestamp}}</td>
+                <td>{{bug.deltaTimestamp}}</td>
+                <td>{{bug.votesCount}}</td>
             </tr>
         </table>
+        <div ng-show='busy'>Loading data...</div>
     </div>
+  </div>
 </div>
