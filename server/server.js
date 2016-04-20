@@ -140,6 +140,7 @@ apiRoutes.get('/bugs',function(req, res) {
     // ];
     setTimeout(function () {
         dataGenerator.bugs(10).then(function(bugs){
+            //res.status(200).send({bugs:bugs});
             res.json(bugs);
         });
     }, 1000);

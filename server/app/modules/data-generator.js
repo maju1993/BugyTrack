@@ -22,7 +22,7 @@ exports.bugs = function(count)
                     key: generateKey(),
                     groupId: generateGroupId(),
                     assignedToId: generateAssignedToId(),
-                    assigendTo:body.results[0].user.name.first + " " + body.results[0].user.name.last,
+                    //assigendTo:body.results[0].user.name.first + " " + body.results[0].user.name.last,
                     severity: generateSeverity(),
                     status: generateStatus(),
                     creationTimestamp: generateCreationTimestamp(),
